@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const ClothesModel = require("../models").Clothes;
+const OwnerModel = require("../models").Owner;
 
 // GET ALL CLOTHES
 router.get("/", async (req, res) => {
-    let clothes = await ClothesModel.findAll();
+    let clothes = await ClothesModel.findAll({ include: OwnerModel });
     res.json({ clothes });
 })
 
@@ -17,7 +18,9 @@ router.post("/", async (req, res) => {
 
 // GET CLOTHING DETAILS
 router.get("/:id", async (req, res) => {
-    let clothes = await ClothesModel.findByPk(req.params.id);
+    let clothes = await ClothesModel.findByPk(req.params.id, {
+        include: OwnerModel 
+    });
     res.json({ clothes });
 })
 
