@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/owners", require("./controllers/ownersController.js"));
-app.use("/api/clothes", require("./controllers/clothesController.js"));
+
 
 app.listen(process.env.PORT, () => {
   console.log("Nodemon listening");

@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const OwnerModel = require("../models").Owner;
+const ClothesModel = require("../models").Clothes;
 
 // GET ALL OWNERS
 router.get("/", async (req, res) => {
-    let owners = await OwnerModel.findAll();
+    let owners = await OwnerModel.findAll({ include: ClothesModel });
     res.json({ owners });
 })
 
@@ -17,7 +18,11 @@ router.post("/", async (req, res) => {
 
 // GET OWNERS PROFILE
 router.get("/:id", async (req, res) => {
-    let owner = await OwnerModel.findByPk(req.params.id);
+    let owner = await OwnerModel.findByPk(req.params.id, {
+        include: [
+            ClothesModel
+        ],
+    });
     res.json({ owner });
 })
 
@@ -39,5 +44,16 @@ router.delete("/:id", async (req, res) => {
         message: `Owner with id ${req.params.id} was deleted`,
     });
 });
+
+// ADD NEW CLOTHING
+router.post('/:id/newclothing', async (req, res) => {
+    req.body.ownerId = req.params.id
+    let clothes = await SongModel.create(req.body);
+    let owner = await OwnerModel.findByPk(req.params.id, {
+        include: [
+            { model: ClothesModel}
+        ]
+    });
+})
 
 module.exports = router;
