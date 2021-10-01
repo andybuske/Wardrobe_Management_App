@@ -46,14 +46,15 @@ router.delete("/:id", async (req, res) => {
 });
 
 // ADD NEW CLOTHING
-router.post('/:id/newclothing', async (req, res) => {
+router.post('/:id/newclothes', async (req, res) => {
     req.body.ownerId = req.params.id
-    let clothes = await SongModel.create(req.body);
+    let clothes = await ClothesModel.create(req.body);
     let owner = await OwnerModel.findByPk(req.params.id, {
         include: [
             { model: ClothesModel}
         ]
     });
+    res.json({ owner, clothes })
 })
 
 module.exports = router;
